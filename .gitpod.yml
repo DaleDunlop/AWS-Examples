@@ -127,8 +127,6 @@ tasks:
       # Install neofetch using Homebrew
       brew install neofetch
 
-      # Start zsh as a login shell
-      zsh -l
        # Set up zsh to start as a login shell on every new terminal without using chsh
       echo "if [ -z \"$GITPOD_INIT\" ]; then exec zsh -l; fi" >> ~/.bashrc
 
