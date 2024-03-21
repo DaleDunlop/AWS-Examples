@@ -1,5 +1,10 @@
-#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
 tasks:
+#Random Utilites
+  - name: utils
+    before: |
+      sudo apt-get install tree
+#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
   - name: aws-cli
     before: |
       cd /workspace
