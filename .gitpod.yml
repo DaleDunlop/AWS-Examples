@@ -49,6 +49,10 @@ tasks:
     
     command: |
       echo "Versions:"
+      echo "---------"
       aws --version || echo "AWS CLI not found."
+      echo "------------------------------------------------------------------------------------------"
       terraform version || echo "Terraform not found."
+      echo "----------------"
       pwsh --version || echo "PowerShell not found."
+      echo "----------------"
