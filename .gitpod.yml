@@ -13,7 +13,7 @@ tasks:
       sudo ./aws/install
       cd $THEIA_WORKSPACE_ROOT
 #https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
-  - name: terraform cli
+  - name: terraform-cli
     before: |
       sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
       wget -O- https://apt.releases.hashicorp.com/gpg | \
@@ -39,7 +39,7 @@ tasks:
       rm packages-microsoft-prod.deb
       sudo apt-get update
       sudo apt-get install -y powershell
-      //pwsh
-      //Install-Module -Name AWS.Tools.Installer
-      //Install-AWSToolsModule AWS.Tools.EC2,AWS.Tools.S3 -CleanUp
-      //exit
+      pwsh
+      Install-Module -Name AWS.Tools.Installer
+      Install-AWSToolsModule AWS.Tools.EC2,AWS.Tools.S3 -CleanUp
+      exit
