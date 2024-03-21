@@ -1,49 +1,42 @@
 tasks:
-  - name: utils
-    before: |
+  - name: Setup Tools
+    init: |
+      # Install tree utility
       if ! command -v tree &> /dev/null; then
-        sudo apt-get install tree
+        sudo apt-get update && sudo apt-get install -y tree
       fi
 
-  - name: aws-cli
-    before: |
+      # Install AWS CLI
       if ! aws --version &> /dev/null; then
         cd /workspace
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
         unzip awscliv2.zip
         sudo ./aws/install
-        cd ..
-        rm -rf /workspace/aws /workspace/awscliv2.zip
+        rm -rf aws awscliv2.zip
       fi
 
-  - name: terraform-cli
-    before: |
+      # Install Terraform
       if ! terraform version &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-        wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-        sudo apt update && sudo apt-get install terraform
+        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release; echo $VERSION_CODENAME) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+        sudo apt update && sudo apt-get install -y terraform
       fi
 
-  - name: powershell
-    before: |
+      # Install PowerShell
       if ! pwsh --version &> /dev/null; then
         sudo apt-get update && sudo apt-get install -y wget apt-transport-https software-properties-common
-        source /etc/os-release
-        wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb -O /workspace/packages-microsoft-prod.deb
-        sudo dpkg -i /workspace/packages-microsoft-prod.deb
+        wget -q "https://packages.microsoft.com/config/ubuntu/$(. /etc/os-release; echo $VERSION_ID)/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
+        sudo dpkg -i packages-microsoft-prod.deb
         sudo apt-get update && sudo apt-get install -y powershell
-        rm -rf /workspace/packages-microsoft-prod.deb
+        rm packages-microsoft-prod.deb
       fi
-      # AWS PowerShell modules installation (Note: This might need to be in a 'command' phase if required to be in an interactive session)
-      pwsh -Command "Install-Module -Name AWS.Tools.Installer -Force"
-      pwsh -Command "Install-AWSToolsModule AWS.Tools.EC2, AWS.Tools.S3 -Force -CleanUp"
       
-  - name: Display Versions
+      # Install AWS PowerShell modules
+      pwsh -Command "Install-Module -Name AWS.Tools.Installer -Force; Install-AWSToolsModule AWS.Tools.EC2, AWS.Tools.S3 -Force -CleanUp"
+    
     command: |
-      echo "AWS CLI Version:"
-      aws --version
-      echo "Terraform Version:"
-      terraform version
-      echo "PowerShell Version:"
-      pwsh --version
+      echo "Versions:"
+      aws --version || echo "AWS CLI not found."
+      terraform version || echo "Terraform not found."
+      pwsh --version || echo "PowerShell not found."
