@@ -1,6 +1,6 @@
 
 tasks:
-#Random Utilites
+#Random Utilities
   - name: utils
     before: |
       sudo apt-get install tree
@@ -27,6 +27,7 @@ tasks:
       pwsh
       Install-Module -Name AWS.Tools.Installer
       Install-AWSToolsModule AWS.Tools.EC2,AWS.Tools.S3 -CleanUp
+      exit
 #https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
   - name: terraform cli
     before: |
