@@ -1,3 +1,4 @@
+#https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html
 # Required gems
 require 'aws-sdk-s3'  # Enables AWS S3 services interaction.
 require 'pry'        # Debugging tool.
