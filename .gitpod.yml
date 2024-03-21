@@ -41,8 +41,7 @@ tasks:
         sudo dpkg -i packages-microsoft-prod.deb
         rm packages-microsoft-prod.deb
         sudo apt-get update
-        sudo apt-get install -y powershel
-        rm packages-microsoft-prod.deb
+        sudo apt-get install -y powershell
       fi
       
       # Install AWS PowerShell modules
