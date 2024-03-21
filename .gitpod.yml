@@ -1,6 +1,11 @@
 tasks:
   - name: Setup Tools
     init: |
+      set -e  # Exit immediately if a command exits with a non-zero status.
+
+      # Update package lists
+      sudo apt-get update
+
       # Install tree utility
       if ! command -v tree &> /dev/null; then
         sudo apt-get update && sudo apt-get install -y tree
@@ -44,10 +49,66 @@ tasks:
          sudo apt-get install -y powershell
       fi
       
-      # Install AWS PowerShell modules
-      pwsh -Command "Install-Module -Name AWS.Tools.Installer -Force; Install-AWSToolsModule AWS.Tools.EC2, AWS.Tools.S3 -Force -CleanUp"
-    
+      # Install kubectl
+      if ! kubectl version --client &> /dev/null; then
+        curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+      fi
+
+      # Install Helm
+      if ! helm version --client &> /dev/null; then
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      fi
+
+      # Install Minikube
+      if ! minikube version &> /dev/null; then
+        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        chmod +x minikube
+        sudo install minikube /usr/local/bin/
+      fi
+
+      # Install Zsh
+      if ! zsh --version &> /dev/null; then
+        sudo apt-get update && sudo apt-get install -y zsh
+      fi
+
+      # Install Oh My Zsh
+      if [ ! -d "$HOME/.oh-my-zsh" ]; then
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      fi
+
+      # Clone Powerlevel10k theme
+      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+        git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+      fi
+
+      # Set ZSH_THEME to powerlevel10k/powerlevel10k in .zshrc
+      if ! grep -q 'ZSH_THEME="powerlevel10k/powerlevel10k"' $HOME/.zshrc; then
+        sed -i 's|ZSH_THEME=".*"|ZSH_THEME="powerlevel10k/powerlevel10k"|' $HOME/.zshrc
+      fi
+
+      # Clone zsh-autosuggestions plugin
+      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+      fi
+
+      # Clone zsh-syntax-highlighting plugin
+      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+      fi
+
+      # Add plugins to .zshrc
+      if ! grep -q 'zsh-autosuggestions' $HOME/.zshrc; then
+        echo "source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> $HOME/.zshrc
+      fi
+      if ! grep -q 'zsh-syntax-highlighting' $HOME/.zshrc; then
+        echo "source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> $HOME/.zshrc
+        echo "plugins+=(zsh-autosuggestions zsh-syntax-highlighting)" >> $HOME/.zshrc
+      fi
+      
     command: |
+      clear
       echo "Versions:"
       echo "---------"
       aws --version || echo "AWS CLI not found."
