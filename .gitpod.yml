@@ -117,11 +117,6 @@ tasks:
         echo "plugins+=(zsh-autosuggestions zsh-syntax-highlighting)" >> $HOME/.zshrc
       fi
 
-      # Now that all configurations are done, change the default shell to zsh
-      if [ "$SHELL" != "$(which zsh)" ]; then
-        chsh -s $(which zsh)
-      fi
-
       # Install Homebrew
       if ! command -v brew &> /dev/null; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -134,8 +129,11 @@ tasks:
 
       # Start zsh as a login shell
       zsh -l
-      
+       # Set up zsh to start as a login shell on every new terminal without using chsh
+      echo "if [ -z \"$GITPOD_INIT\" ]; then exec zsh -l; fi" >> ~/.bashrc
+
     command: |
+      export GITPOD_INIT=1
       clear
       neofetch
       echo "------------------------------------------------"
@@ -147,3 +145,5 @@ tasks:
       echo "----------------"
       pwsh --version || echo "PowerShell not found."
       echo "----------------"
+      unset GITPOD_INIT
+      exec zsh -l
