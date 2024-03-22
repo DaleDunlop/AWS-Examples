@@ -20,6 +20,7 @@ tasks:
       ./bin/cdk_install.sh
 
       ./bin/pulumi_install.sh
+      export PATH="$PATH:/home/gitpod/.pulumi/bin"
 
       ./bin/Kubernetes_install.sh
 

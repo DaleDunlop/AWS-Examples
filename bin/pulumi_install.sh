@@ -3,5 +3,4 @@
 # Install pulumi
       if ! pulumi &> /dev/null; then
         curl -fsSL https://get.pulumi.com | sh
-        export PATH="$PATH:/home/gitpod/.pulumi/bin"
       fi
