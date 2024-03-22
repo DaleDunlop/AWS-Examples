@@ -59,6 +59,11 @@ tasks:
         npm i -g aws-cdk
       fi
 
+      # Install CDK
+      if ! pulumi &> /dev/null; then
+        curl -fsSL https://get.pulumi.com | sh
+        export PATH="$PATH:/home/gitpod/.pulumi/bin"
+      fi
       # Install kubectl
       if ! kubectl version --client &> /dev/null; then
         curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -156,5 +161,7 @@ tasks:
       echo "CDK"
       cdk --version || echo "CDK not found."
       echo "----------------"
+      echo "Pulumi"
+      pulumi version || echo "Pulumi not found."
       unset GITPOD_INIT
       exec zsh -l
