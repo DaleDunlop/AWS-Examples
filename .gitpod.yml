@@ -11,139 +11,19 @@ tasks:
         sudo apt-get update && sudo apt-get install -y tree
       fi
 
-       # Install custom fonts
-        mkdir -p $HOME/.local/share/fonts
-        cp /workspace/AWS-Examples/Fonts/*.ttf $HOME/.local/share/fonts/
-        fc-cache -fv
+      ./bin/aws_cli_install.sh
 
-      # Install AWS CLI
-      if ! aws --version &> /dev/null; then
-        cd /workspace
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
-        sudo ./aws/install
-        rm -rf aws awscliv2.zip
-        cd $THEIA_WORKSPACE_ROOT
-      fi
+      ./bin/terraform_cli_install.sh
 
-      # Install Terraform
-      if ! terraform version &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
-        wget -O- https://apt.releases.hashicorp.com/gpg | \
-        gpg --dearmor | \
-        sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
-        gpg --no-default-keyring \
-        --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-        --fingerprint
-        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-        https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-        sudo tee /etc/apt/sources.list.d/hashicorp.list
-        sudo apt update
-        sudo apt-get install terraform
-      fi
-
-      # Install PowerShell
-      if ! pwsh --version &> /dev/null; then
-        sudo apt-get update
-        sudo apt-get install -y wget apt-transport-https software-properties-common
-        source /etc/os-release
-        wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
-        sudo dpkg -i packages-microsoft-prod.deb
-        rm packages-microsoft-prod.deb
-        sudo apt-get update
-        sudo apt-get install -y powershell
-      fi
+      ./bin/powershell_install.sh
       
-      # Install CDK
-      if ! cdk --version &> /dev/null; then
-        npm i -g aws-cdk
-      fi
+      ./bin/cdk_install.sh
 
-      # Install CDK
-      if ! pulumi &> /dev/null; then
-        curl -fsSL https://get.pulumi.com | sh
-        export PATH="$PATH:/home/gitpod/.pulumi/bin"
-      fi
-      # Install kubectl
-      if ! kubectl version --client &> /dev/null; then
-        curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
-      fi
+      ./bin/pulumi_install.sh
 
-      # Install Helm
-      if ! helm version --client &> /dev/null; then
-        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-      fi
+      ./bin/Kubernetes_install.sh
 
-      # Install Minikube
-      if ! minikube version &> /dev/null; then
-        cd /workspace
-        curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        chmod +x minikube
-        sudo install minikube /usr/local/bin/
-        cd $THEIA_WORKSPACE_ROOT
-      fi
-
-      # Install Zsh
-      if ! zsh --version &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y zsh
-      fi
-
-       # Install Oh My Zsh without changing the default shell or running zsh
-      if [ ! -d "$HOME/.oh-my-zsh" ]; then
-        env RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-      fi
-
-      # Clone Powerlevel10k theme
-      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-        git clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-      fi
-
-      # Copy your Powerlevel10k configuration file from the repository to the home directory
-      cp ./.p10k.zsh $HOME/.p10k.zsh
-
-      # Ensure the Powerlevel10k theme is sourced from .zshrc
-      if ! grep -q 'source ~/.p10k.zsh' $HOME/.zshrc; then
-        echo 'source ~/.p10k.zsh' >> $HOME/.zshrc
-      fi
-
-      # Set ZSH_THEME to powerlevel10k/powerlevel10k in .zshrc
-      if ! grep -q 'ZSH_THEME="powerlevel10k/powerlevel10k"' $HOME/.zshrc; then
-        sed -i 's|ZSH_THEME=".*"|ZSH_THEME="powerlevel10k/powerlevel10k"|' $HOME/.zshrc
-      fi
-
-      # Clone zsh-autosuggestions plugin
-      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-      fi
-
-      # Clone zsh-syntax-highlighting plugin
-      if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-      fi
-
-      # Add plugins to .zshrc
-      if ! grep -q 'zsh-autosuggestions' $HOME/.zshrc; then
-        echo "source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> $HOME/.zshrc
-      fi
-      if ! grep -q 'zsh-syntax-highlighting' $HOME/.zshrc; then
-        echo "source ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> $HOME/.zshrc
-        echo "plugins+=(zsh-autosuggestions zsh-syntax-highlighting)" >> $HOME/.zshrc
-      fi
-
-      # Install Homebrew
-      if ! command -v brew &> /dev/null; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $HOME/.profile
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-      fi
-
-      # Install neofetch using Homebrew
-      brew install neofetch
-
-       # Set up zsh to start as a login shell on every new terminal without using chsh
-      echo "if [ -z \"$GITPOD_INIT\" ]; then exec zsh -l; fi" >> ~/.bashrc
+      ./bin/zsh_install.sh
 
     command: |
       export GITPOD_INIT=1
