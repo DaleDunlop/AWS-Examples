@@ -54,6 +54,11 @@ tasks:
          sudo apt-get install -y powershell
       fi
       
+      # Install CDK
+      if ! cdk --version &> /dev/null; then
+         npm i -g aws-cdk
+      fi
+
       # Install kubectl
       if ! kubectl version --client &> /dev/null; then
         curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -147,6 +152,8 @@ tasks:
       terraform version || echo "Terraform not found."
       echo "----------------"
       pwsh --version || echo "PowerShell not found."
+      echo "----------------"
+      cdk --version || echo "CDK not found."
       echo "----------------"
       unset GITPOD_INIT
       exec zsh -l
