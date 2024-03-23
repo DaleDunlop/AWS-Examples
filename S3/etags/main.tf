@@ -14,5 +14,6 @@ resource "aws_s3_object" "default" {
   bucket = aws_s3_bucket.default.id
   key    = "hello.txt"
   source = "hello.txt"
+  etag = filemd5("hello.txt")
 }
 
