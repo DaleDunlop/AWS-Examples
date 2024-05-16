@@ -7,8 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-BUCKET_NAME=$1
+BUCKET_NAME="$1"
 
-# https://docs.aws.amazon.com/cli/latest/reference/s3api/create-bucket.html
-aws s3api delete-bucket \
---bucket $BUCKET_NAME
+# Delete bucket
+aws s3api delete-bucket --bucket "$BUCKET_NAME"

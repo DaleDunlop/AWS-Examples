@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-BUCKET_NAME=$1
+BUCKET_NAME="$1"
 
 # Check if bucket already exists
 if aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
@@ -16,13 +16,11 @@ if aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
 fi
 
 # Create bucket
-aws s3api create-bucket \
---bucket $BUCKET_NAME \
---create-bucket-configuration "LocationConstraint=ca-central-1" \
---query Location \
---output text
-
-if [ $? -ne 0 ]; then
+if ! aws s3api create-bucket \
+    --bucket "$BUCKET_NAME" \
+    --create-bucket-configuration "LocationConstraint=ca-central-1" \
+    --query Location \
+    --output text; then
     echo "Failed to create bucket $BUCKET_NAME."
     exit 1
 fi

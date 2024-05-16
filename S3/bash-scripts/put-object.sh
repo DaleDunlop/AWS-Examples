@@ -7,16 +7,18 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+# Check for filename
 if [ -z "$2" ]; then
     echo "There needs to be a filename eg. ./bucket my-bucket-name filename"
     exit 1
 fi
-BUCKET_NAME=$1
-FILENAME=$2
 
+BUCKET_NAME="$1"
+FILENAME="$2"
 OBJECT_KEY=$(basename "$FILENAME")
 
+# Put object in the bucket
 aws s3api put-object \
---bucket $BUCKET_NAME \
---body $FILENAME \
---key $OBJECT_KEY
+--bucket "$BUCKET_NAME" \
+--body "$FILENAME" \
+--key "$OBJECT_KEY"
