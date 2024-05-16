@@ -31,3 +31,21 @@ tasks:
       ./bin/check_installs.sh
       unset GITPOD_INIT
       exec zsh -l
+
+  - name: Setup Environment
+    command: |
+      # Install additional dependencies
+      npm install -g aws-cdk
+      pip install -r S3/iac/pulumi/requirements.txt
+      bundle install --gemfile=S3/SDK/ruby/Gemfile
+      # Run tests
+      mvn test
+      rubocop
+      shellcheck S3/bash-scripts/*.sh
+
+vscode:
+  extensions:
+    - redhat.java
+    - rebornix.ruby
+    - hashicorp.terraform
+    - ms-python.python
