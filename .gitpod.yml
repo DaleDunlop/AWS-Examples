@@ -1,5 +1,5 @@
 tasks:
-  - name: Setup Tools
+  - name: Setup Tools and Environment
     init: |
       set -e  # Exit immediately if a command exits with a non-zero status.
 
@@ -11,6 +11,7 @@ tasks:
         sudo apt-get update && sudo apt-get install -y tree
       fi
 
+      # Run installation scripts
       ./bin/aws_cli_install.sh
       ./bin/terraform_cli_install.sh
       ./bin/powershell_install.sh
@@ -20,16 +21,6 @@ tasks:
       ./bin/Kubernetes_install.sh
       ./bin/zsh_install.sh
 
-    command: |
-      export GITPOD_INIT=1
-      ./bin/check_installs.sh
-      unset GITPOD_INIT
-      exec zsh -l
-
-  - name: Setup Environment
-    init: |
-      set -e
-
       # Install additional dependencies
       npm install -g aws-cdk
       pip install -r S3/iac/pulumi/requirements.txt
@@ -37,10 +28,18 @@ tasks:
       mvn install
 
     command: |
+      set -e  # Exit immediately if a command exits with a non-zero status.
+
+      # Verify installations
+      export GITPOD_INIT=1
+      ./bin/check_installs.sh
+      unset GITPOD_INIT
+
       # Run tests
       mvn test
       rubocop
       shellcheck S3/bash-scripts/*.sh
+      exec zsh -l
 
 vscode:
   extensions:
