@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal:true
 
 # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html
 # Required gems
