@@ -1,4 +1,4 @@
-# AWS-Examples
+# My AWS Gitpod Workspace
 
 ## Overview
 
@@ -10,11 +10,11 @@ This repository is configured to work with [Gitpod](https://www.gitpod.io/), a c
 
 ### Launching the Repository in Gitpod
 
-1. Click the button below to open this repository in Gitpod.
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/DaleDunlop/AWS-Examples)
-2. Gitpod will launch a workspace with all the necessary dependencies installed.
-3. Ensure to Add AWS credentials to your gitpod workspace.
-4. You can start coding and testing immediately.
+
+1. Gitpod will launch a workspace with all the necessary dependencies installed.
+2. Ensure to Add AWS credentials to your gitpod workspace.
+3. You can start coding and testing immediately.
 
 ## Examples
 
