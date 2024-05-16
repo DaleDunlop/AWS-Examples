@@ -36,6 +36,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     racc (1.7.3)
+    securerandom (0.3.1)
 
 PLATFORMS
   aarch64-linux
@@ -46,9 +47,10 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  aws-sdk-s3
+  aws-sdk-s3 (~> 1.0)
   nokogiri
   pry
+  securerandom
 
 BUNDLED WITH
    2.5.6
