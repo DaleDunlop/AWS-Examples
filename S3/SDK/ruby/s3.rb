@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html
 # Required gems
 require 'aws-sdk-s3'
@@ -21,7 +22,7 @@ client.create_bucket(
 )
 
 # Determine the number of files to upload (randomly between 1 and 7)
-number_of_files = rand(1..6)
+number_of_files = 1 + rand(6)
 puts "Number of files to upload: #{number_of_files}"
 
 # Upload process
