@@ -2,13 +2,13 @@
 
 # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/S3/Client.html
 # Required gems
-require 'aws-sdk-s3'  # Enables AWS S3 services interaction.
-require 'pry'        # Debugging tool.
-require 'securerandom'  # Generates unique identifiers (UUID).
+require 'aws-sdk-s3'
+require 'pry'
+require 'securerandom'
 
 # S3 Bucket Configuration
-bucket_name = ENV['BUCKET_NAME']  # S3 Bucket name from environment variable.
-region = 'eu-west-2'  # AWS region for the S3 bucket.
+bucket_name = ENV['BUCKET_NAME']
+region = 'eu-west-2'
 
 # Initialize AWS S3 client
 client = Aws::S3::Client.new(region: region)
@@ -27,8 +27,8 @@ puts "Number of files to upload: #{number_of_files}"
 
 # Upload process
 number_of_files.times do |i|
-  filename = "file_#{i}.txt"  # Construct file name.
-  output_path = "/tmp/#{filename}"  # Temporary path for file creation.
+  filename = "file_#{i}.txt"
+  output_path = "/tmp/#{filename}"
 
   # Create a file with a unique UUID as content.
   File.open(output_path, 'w') { |file| file.write(SecureRandom.uuid) }
