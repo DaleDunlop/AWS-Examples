@@ -1,5 +1,5 @@
 tasks:
-  - name: Setup Tools and Environment
+  - name: Setup and Environment Configuration
     init: |
       set -e  # Exit immediately if a command exits with a non-zero status.
 
@@ -11,6 +11,7 @@ tasks:
         sudo apt-get update && sudo apt-get install -y tree
       fi
 
+      # Run installation scripts
       ./bin/aws_cli_install.sh
       ./bin/terraform_cli_install.sh
       ./bin/powershell_install.sh
@@ -27,6 +28,9 @@ tasks:
       mvn install
 
     command: |
+      set -e  # Exit immediately if a command exits with a non-zero status.
+
+      # Verify installations
       export GITPOD_INIT=1
       ./bin/check_installs.sh
       unset GITPOD_INIT
