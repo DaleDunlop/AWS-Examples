@@ -1,8 +1,7 @@
 # frozen_string_literal: true
+source 'https://rubygems.org'
 
-source "https://rubygems.org"
-
-# gem "rails"
-gem 'aws-sdk-s3'
-gem 'pry'
+gem 'aws-sdk-s3', '~> 1.0'
 gem 'nokogiri'
+gem 'pry'
+gem 'securerandom'
