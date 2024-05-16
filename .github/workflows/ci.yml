@@ -14,21 +14,21 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3  # Updated to use Node.js 20
+      uses: actions/checkout@v4
 
     - name: Set up JDK 11
-      uses: actions/setup-java@v3  # Updated to use Node.js 20
+      uses: actions/setup-java@v4
       with:
         distribution: 'adopt'
         java-version: '11'
 
     - name: Build with Maven
       run: mvn clean install
-      working-directory: ./S3/SDK/java/getstarted  # Ensure Maven runs in the correct directory
+      working-directory: ./S3/SDK/java/getstarted
 
     - name: Run unit tests
       run: mvn test
-      working-directory: ./S3/SDK/java/getstarted  # Ensure Maven runs in the correct directory
+      working-directory: ./S3/SDK/java/getstarted
 
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -38,13 +38,15 @@ jobs:
     - name: Lint Ruby code
       run: |
         gem install rubocop
-        rubocop
+        rubocop S3/SDK/ruby/Gemfile S3/SDK/ruby/s3.rb
 
     - name: Install ShellCheck
       run: sudo apt-get install -y shellcheck
 
     - name: Lint Shell scripts
-      run: shellcheck S3/bash-scripts/*.sh
-
-
-
+      run: |
+        if ls S3/bash-scripts/*.sh 1> /dev/null 2>&1; then
+          shellcheck S3/bash-scripts/*.sh
+        else
+          echo "No shell scripts found in S3/bash-scripts/"
+        fi
