@@ -22,8 +22,8 @@ client.create_bucket(
 )
 
 # Determine the number of files to upload (randomly between 1 and 7)
-number_of_files = 1 + rand(6)
-puts 'Number of files to upload: #{number_of_files}'
+number_of_files = rand(1..6)
+puts "Number of files to upload: #{number_of_files}"
 
 # Upload process
 number_of_files.times do |i|
