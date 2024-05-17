@@ -1,3 +1,3 @@
-/workspace/AWS-Examples/SDK/java/getstarted/src/main/java/org/example/App.java
-/workspace/AWS-Examples/SDK/java/getstarted/src/main/java/org/example/Handler.java
-/workspace/AWS-Examples/SDK/java/getstarted/src/main/java/org/example/DependencyFactory.java
+/workspace/AWS-Examples/S3/SDK/java/getstarted/src/main/java/org/example/DependencyFactory.java
+/workspace/AWS-Examples/S3/SDK/java/getstarted/src/main/java/org/example/Handler.java
+/workspace/AWS-Examples/S3/SDK/java/getstarted/src/main/java/org/example/App.java
