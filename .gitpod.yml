@@ -23,25 +23,27 @@ tasks:
 
       # Install additional dependencies
       npm install -g aws-cdk
-      sudo apt install shellcheck
+      sudo apt install -y shellcheck
       pip install -r S3/iac/pulumi/requirements.txt
       bundle install --gemfile=S3/SDK/ruby/Gemfile
 
       # Navigate to the directory containing the pom.xml file and install Java dependencies
-      cd ./S3/SDK/java/getstarted
+      cd S3/SDK/java/getstarted
       mvn install
 
     command: |
       export GITPOD_INIT=1
-      
+      ./bin/check_installs.sh
+      unset GITPOD_INIT
+
       # Run tests
-      cd ./S3/SDK/java/getstarted
+      cd S3/SDK/java/getstarted
       mvn -q test -DtrimStackTrace
       cd ../../../..
       rubocop
       shellcheck S3/bash-scripts/*.sh
-      ./bin/check_installs.sh
-      unset GITPOD_INIT
+
+      # Keep the terminal open
       exec zsh -l
 
 vscode:
