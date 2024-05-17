@@ -28,17 +28,16 @@ tasks:
       mvn install
 
     command: |
-      set -e  # Exit immediately if a command exits with a non-zero status.
-
       # Verify installations
       export GITPOD_INIT=1
       ./bin/check_installs.sh
       unset GITPOD_INIT
-
+      
       # Run tests
       mvn test
       rubocop
       shellcheck S3/bash-scripts/*.sh
+      unset GITPOD_INIT
       exec zsh -l
 
 vscode:
