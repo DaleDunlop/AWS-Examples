@@ -17,7 +17,6 @@ tasks:
       ./bin/powershell_install.sh
       ./bin/cdk_install.sh
       ./bin/pulumi_install.sh
-      export PATH="$PATH:/home/gitpod/.pulumi/bin"
       ./bin/Kubernetes_install.sh
       ./bin/zsh_install.sh
 
@@ -30,6 +29,7 @@ tasks:
       # Navigate to the directory containing the pom.xml file and install Java dependencies
       cd S3/SDK/java/getstarted
       mvn install
+      cd ../../../..
 
     command: |
       export GITPOD_INIT=1

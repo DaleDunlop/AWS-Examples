@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+# Add Pulumi to PATH
+export PATH=$PATH:$HOME/.pulumi/bin
 clear
 neofetch
 echo "------------------------------------------------"
