@@ -21,6 +21,7 @@
       fi
 
       # Copy your Powerlevel10k configuration file from the repository to the home directory
+      sed -i 's/\r//' ~/.p10k.zsh
       cp ./.p10k.zsh $HOME/.p10k.zsh
 
       # Ensure the Powerlevel10k theme is sourced from .zshrc
